@@ -1,3 +1,5 @@
 export * from './Services/send-email.utils.js'
 export * from './hash.utils.js'
 export * from './token.utils.js'
+export * from './Errors/http.exception.utils.js'
+export * from './Errors/exceptions.utils.js'

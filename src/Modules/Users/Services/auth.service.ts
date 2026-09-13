@@ -3,7 +3,7 @@ import { OtpTypeEnum, type IOTP, type IRequest, type IUser } from "../../../Comm
 import { BlackListedTokenRepository, UserRepository } from "../../../DB/Repositories/index.js";
 import { UserModel , BlackListedTokenModel} from "../../../DB/Models/index.js";
 import { customAlphabet } from 'nanoid'
-import { compareHash, eventEmiiter, generateHash, generateToken } from "../../../Utils/index.js";
+import { compareHash, ConflictException, eventEmiiter, generateHash, generateToken, UnauthorizedException } from "../../../Utils/index.js";
 import { v4 as uuidv4 } from 'uuid';
 import type { SignOptions } from "jsonwebtoken";
 
@@ -21,7 +21,7 @@ class AuthService {
         const {firstName , lastName , email , password , gender ,phoneNumber }:Partial<IUser> = req.body
 
         const isEmailExist = await this.userRepo.findOneDocument({email} , 'email')
-        if(isEmailExist) return res.status(409).json({message:"Email Already Exist"})
+        if(isEmailExist) throw new ConflictException("Email Already Exist")
 
         const otp = nanoid()
         eventEmiiter.emit("send-email",{
@@ -47,10 +47,9 @@ class AuthService {
 
     signin = async(req:Request , res:Response)=>{
         const {email , password} = req.body
-        if(!email || !password) return res.status(400).json({message:"Please fill all fields"}) 
 
         const user = await this.userRepo.findOneDocument({email})
-        if(!user) return res.status(401).json({message:"User not found, Please signup first and try again"})
+        if(!user) throw new UnauthorizedException("User not found, Please signup first and try again")
 
         const matchPassword = compareHash(password , user.password)
         if(!matchPassword)  return res.status(401).json({message:"Incorrect Credentials"})
