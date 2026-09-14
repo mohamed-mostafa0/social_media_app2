@@ -2,7 +2,7 @@ import 'dotenv/config'
 import express, { type NextFunction, type Request, type Response } from "express"
 import * as controllers from './Modules/index.js'
 import { dbConnection } from './DB/db.connection.js'
-import { HttpException } from './Utils/index.js'
+import { failedResponse, HttpException } from './Utils/index.js'
 
 
 const app = express()
@@ -16,9 +16,9 @@ app.use("/api/auth" , controllers.authController)
 app.use((err:Error | HttpException | null, req:Request , res:Response , next:NextFunction)=>{
     if(err){
         if(err instanceof HttpException){
-            res.status(err.statusCode).json({message:err.message , error:err.error})
+            res.status(err.statusCode).json(failedResponse(err.message , err.statusCode , err.error))
         }else{
-            res.status(500).json({message:"something went wrong" , err , stack:err.stack})
+            res.status(500).json(failedResponse("Something Went Wrong" , 500 , err))
         }
     }
 })

@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
-import { OtpTypeEnum, type IOTP, type IRequest, type IUser } from "../../../Common/index.js";
+import { OtpTypeEnum, type IOTP, type IRequest, type IUser, type signupBodyType } from "../../../Common/index.js";
 import { BlackListedTokenRepository, UserRepository } from "../../../DB/Repositories/index.js";
 import { UserModel , BlackListedTokenModel} from "../../../DB/Models/index.js";
 import { customAlphabet } from 'nanoid'
-import { compareHash, ConflictException, eventEmiiter, generateHash, generateToken, UnauthorizedException } from "../../../Utils/index.js";
+import { compareHash, ConflictException, eventEmiiter, generateHash, generateToken, successResponse, UnauthorizedException } from "../../../Utils/index.js";
 import { v4 as uuidv4 } from 'uuid';
 import type { SignOptions } from "jsonwebtoken";
 
@@ -18,7 +18,7 @@ class AuthService {
 
 
     signup = async(req:Request , res:Response)=>{
-        const {firstName , lastName , email , password , gender ,phoneNumber }:Partial<IUser> = req.body
+        const {firstName , lastName , email , password , gender ,phoneNumber }:signupBodyType = req.body
 
         const isEmailExist = await this.userRepo.findOneDocument({email} , 'email')
         if(isEmailExist) throw new ConflictException("Email Already Exist")
@@ -76,7 +76,7 @@ class AuthService {
             expiresIn:process.env.REFRESH_TOKEN_EXPIRATION_TIME as SignOptions['expiresIn']
         })
 
-        return res.status(200).json({accessToken , refreshToken})
+        return res.status(200).json(successResponse("Logged In" , 200 , {accessToken , refreshToken}))
     }
 
 
