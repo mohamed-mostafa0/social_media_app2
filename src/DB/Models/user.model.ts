@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { GenderEnum, OtpTypeEnum, ProviderEnum, RoleEnum, type IUser } from "../../Common/index.js";
+import { generateHash } from "../../Utils/hash.utils.js";
 
 
 
@@ -61,4 +62,10 @@ const userSchema = new mongoose.Schema<IUser>({
 })
 
 
+userSchema.pre('save' , function(){
+    if(this.isModified('password')){
+        this.password = generateHash(this.password)
+    }
+
+})
 export const UserModel = mongoose.model<IUser>('User' , userSchema)

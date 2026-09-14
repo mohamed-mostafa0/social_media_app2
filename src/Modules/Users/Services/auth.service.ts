@@ -35,10 +35,9 @@ class AuthService {
             expiresAt: new Date(Date.now() + 600000),
             otpType:OtpTypeEnum.CONFIRMATION
         }
-        const hashedPassword:string = generateHash(password!) 
 
         const user = await this.userRepo.createDocument({
-            firstName , lastName , gender , email , password:hashedPassword , phoneNumber,OTPs:[confirmationOtp]
+            firstName , lastName , gender , email , password , phoneNumber,OTPs:[confirmationOtp]
         })
 
         return res.status(201).json({message:"Registered Successfully" , user})

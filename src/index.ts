@@ -11,6 +11,7 @@ app.use(express.json())
 
 
 app.use("/api/auth" , controllers.authController)
+app.use("/api/profile" , controllers.profileController)
 
 
 app.use((err:Error | HttpException | null, req:Request , res:Response , next:NextFunction)=>{

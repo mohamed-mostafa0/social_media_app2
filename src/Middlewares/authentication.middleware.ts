@@ -10,9 +10,9 @@ import type { JwtPayload } from "jsonwebtoken";
 const blackListedRepo = new BlackListedTokenRepository(BlackListedTokenModel)
 const userRepo = new UserRepository(UserModel)
 
-export const authentication = async(req:Request , res:Response , next:NextFunction)=>{
+export const authentication = async(req:Request , res:Response , next:NextFunction)=>{    
     const{authorization:accessToken} = req.headers
-    if(!accessToken) throw next(new BadRequestException("Please login first"))
+    if(!accessToken) throw next(new BadRequestException("Please login first"))    
 
     const decodedToken = verifyToken(accessToken , process.env.ACCESS_TOKEN_SECRET as string)
     if(!decodedToken) throw next(new UnauthorizedException("Invalid Token"))
