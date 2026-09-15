@@ -13,6 +13,13 @@ class ProfileService {
     private userRepo:UserRepository = new UserRepository(UserModel)
 
 
+    uploadProfilePicture = async(req:Request , res:Response)=>{
+        console.log(req.file);
+        return res.status(200).json({message:"test"})
+        
+    }
+
+
     getProfile = async(req:Request<{id:string}> , res:Response)=>{
         const id = req.params.id as unknown as mongoose.Types.ObjectId
         
