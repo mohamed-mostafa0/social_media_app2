@@ -1,5 +1,5 @@
-import type { Document } from "mongoose"
-import type { GenderEnum, OtpTypeEnum, ProviderEnum, RoleEnum } from "../../Common/index.js"
+import type { Document, Types } from "mongoose"
+import type { friendshipStatusEnum, GenderEnum, OtpTypeEnum, ProviderEnum, RoleEnum } from "../../Common/index.js"
 import type { Request } from "express"
 import type { JwtPayload } from "jsonwebtoken"
 
@@ -47,4 +47,10 @@ export interface IBlackListedToken {
 
 export interface IRequest extends Request{
     loggedInUser : {user:IUser , token:JwtPayload}
+}
+
+export interface IFriendship{
+    requestFromId:Types.ObjectId,
+    requestToId:Types.ObjectId,
+    status:friendshipStatusEnum
 }
