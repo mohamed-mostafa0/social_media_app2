@@ -34,4 +34,8 @@ export class BaseRepository<T>{
         return await this.model.find(filters , projection , options)
     }
 
+    async findDocumentByIdAndDelete(id:mongoose.Schema.Types.ObjectId ,options?:QueryOptions):Promise<T | null>{
+        return await this.model.findByIdAndDelete(id , options)
+    }
+
 }

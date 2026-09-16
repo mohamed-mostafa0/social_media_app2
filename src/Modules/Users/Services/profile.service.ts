@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
-import { UserRepository } from "../../../DB/Repositories/index.js";
+import { FriendshipRepository, UserRepository } from "../../../DB/Repositories/index.js";
 import { UserModel } from "../../../DB/Models/index.js";
-import mongoose from "mongoose";
+import mongoose, { type QueryFilter } from "mongoose";
 import { BadRequestException, deleteImageFromCloudinary, successResponse, uploadImageOnCloudinary } from "../../../Utils/index.js";
-import type { IRequest, IUser } from "../../../Common/index.js";
+import { friendshipStatusEnum, type IFriendship, type IRequest, type IUser } from "../../../Common/index.js";
 
 
 
@@ -11,6 +11,7 @@ import type { IRequest, IUser } from "../../../Common/index.js";
 class ProfileService {
 
     private userRepo:UserRepository = new UserRepository(UserModel)
+    private friendshipRepo = new FriendshipRepository()
 
 
     uploadProfilePicture = async(req:Request , res:Response)=>{
@@ -88,6 +89,73 @@ class ProfileService {
         )
         return res.json(successResponse("Profile Updated Successfully" ,200))
     }
+
+    sendFriendShipRequest = async(req:Request , res:Response)=>{
+        const {user} = (req as unknown as IRequest).loggedInUser
+
+        const friendRequestTo = req.body.friendRequestTo
+        if(!friendRequestTo) throw new BadRequestException("Request to id is required")
+
+        if(user._id.toString() === friendRequestTo.toString()) {
+            throw new BadRequestException("You cannot send a friend request to yourself")
+        }
+
+        const isUserExist = await this.userRepo.findDocumentById(friendRequestTo)
+        if(!isUserExist) throw new BadRequestException("User not found")
+
+        const existingFriendship = await this.friendshipRepo.findOneDocument({
+            $or: [
+                { requestFromId: user._id, requestToId: friendRequestTo },
+                { requestFromId: friendRequestTo, requestToId: user._id }
+            ]
+        })
+        
+        let message;
+        if(existingFriendship){
+            if (existingFriendship.status === friendshipStatusEnum.ACCEPTED) {
+                throw new BadRequestException("You are already friends with this user")
+            }
+            if (existingFriendship.requestToId.toString() === user._id.toString()) {
+                throw new BadRequestException("You already have a pending friend request from this user. Please accept it instead.")
+            }
+            await this.friendshipRepo.findDocumentByIdAndDelete(existingFriendship._id as unknown as mongoose.Schema.Types.ObjectId)
+            message = "Friend request cancelled"
+        }else{
+            await this.friendshipRepo.createDocument({
+                requestFromId:user._id,
+                requestToId:friendRequestTo
+            })
+            message = "Friend request sent"
+        }
+
+        return res.status(201).json(successResponse(message , 201))
+    }
+
+
+    listRequests = async(req:Request , res:Response)=>{
+        const {user:{_id}} = (req as IRequest).loggedInUser
+        const {status} = req.query
+        
+        const filters:QueryFilter<IFriendship> = {status : status? status as friendshipStatusEnum : friendshipStatusEnum.PENDING}
+        if(filters.status === friendshipStatusEnum.ACCEPTED) filters.$or = [{requestToId:_id} , {requestFromId:_id}]
+        else filters.requestToId = _id
+
+        const requests = await this.friendshipRepo.findDocuments(filters , undefined , {
+            populate:[
+                {
+                    path:"requestToId",
+                    select:"firstName lastName profilePicture"
+                },
+                {
+                    path:"requestFromId",
+                    select:"firstName lastName profilePicture"
+                }
+            ]
+        })
+        return res.status(200).json(successResponse("Requests fetched successfully" , 200 , requests))
+    }
+
+    
 }
 
 

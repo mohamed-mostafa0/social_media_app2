@@ -49,7 +49,7 @@ export interface IRequest extends Request{
     loggedInUser : {user:IUser , token:JwtPayload}
 }
 
-export interface IFriendship{
+export interface IFriendship extends Document{
     requestFromId:Types.ObjectId,
     requestToId:Types.ObjectId,
     status:friendshipStatusEnum
