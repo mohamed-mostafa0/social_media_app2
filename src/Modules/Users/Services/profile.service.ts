@@ -39,6 +39,32 @@ class ProfileService {
     }
 
 
+    uploadCoverPicture = async(req:Request , res:Response)=>{
+        const {user} = (req as unknown as IRequest).loggedInUser
+        const file:Express.Multer.File | undefined = req.file
+        if(!file) throw new BadRequestException("please attach an image") 
+        
+        let result;
+        if(user.coverPictureId){
+            await deleteImageFromCloudinary(user.coverPictureId)
+        }
+        try {
+            result = await uploadImageOnCloudinary(file.path, "cover-picture");
+        } catch(error) {
+            throw new BadRequestException("Failed to upload image", error as Error);
+        }
+
+        const updatedUser = await this.userRepo.findByIdAndUpdateDocument( user._id as unknown as mongoose.Schema.Types.ObjectId , {
+            coverPicture: result.secure_url,
+            coverPictureId:result.public_id
+        } , {new:true});
+
+        if(!updatedUser) throw new BadRequestException("Failed to update cover picture");
+        
+        return res.status(200).json(successResponse("Cover picture updated successfully", 200, updatedUser));
+    }
+
+
     getProfile = async(req:Request<{id:string}> , res:Response)=>{
         const id = req.params.id as unknown as mongoose.Types.ObjectId
         

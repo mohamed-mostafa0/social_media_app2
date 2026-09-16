@@ -7,6 +7,14 @@ export const profileController = Router()
 
 profileController.get("/:id" , profileService.getProfile)
 profileController.put("" , authentication, profileService.updateProfile)
-profileController.post("/upload-profile-picture" ,authentication , uploadImage().single("profile-picture") , validateImage ,profileService.uploadProfilePicture )
+profileController.post("/upload-profile-picture",
+    authentication ,
+    uploadImage().single("profile-picture") ,
+    validateImage ,profileService.uploadProfilePicture )
+profileController.post("/upload-cover-picture",
+    authentication,
+    uploadImage().single("cover-picture"),
+    validateImage, 
+    profileService.uploadCoverPicture )
 
 
