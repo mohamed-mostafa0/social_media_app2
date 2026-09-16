@@ -42,7 +42,9 @@ const userSchema = new mongoose.Schema<IUser>({
     },
     DOB:Date,
     profilePicture:String,
+    profilePictureId:String,
     coverPicture:String,
+    coverPictureId:String,
     provider:{
         type:String,
         enum:ProviderEnum,

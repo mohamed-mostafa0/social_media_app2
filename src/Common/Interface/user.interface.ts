@@ -22,7 +22,9 @@ export interface IUser extends Document{
     DOB?:Date,
     age:number
     profilePicture?:string,
+    profilePictureId?:string,
     coverPicture?:string,
+    coverPictureId?:string,
     provider:ProviderEnum,
     googleId?:string,
     phoneNumber?:string,
