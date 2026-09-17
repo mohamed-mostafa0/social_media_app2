@@ -155,6 +155,23 @@ class ProfileService {
         return res.status(200).json(successResponse("Requests fetched successfully" , 200 , requests))
     }
 
+    respondToFriendRequest = async(req:Request , res:Response)=>{
+        const {user:{_id}} = (req as IRequest).loggedInUser
+
+        const {friendRequestId , response} = req.body
+
+        if(!response || !friendRequestId) throw new BadRequestException("Missing details")
+        
+        const friendShip = await this.friendshipRepo.findOneDocument({_id:friendRequestId , status:friendshipStatusEnum.PENDING})
+        if(!friendShip) throw new BadRequestException("Friend request not found or already processed")
+
+        if(friendShip.requestToId.toString() !== _id.toString()) throw new BadRequestException("You are not authorized to respond to this request")
+
+        friendShip.status = response
+        friendShip.save()
+        
+        return res.status(200).json(successResponse(response === friendshipStatusEnum.ACCEPTED ? "Friend request accepted" : "Friend request rejected" , 200))
+    }
     
 }
 

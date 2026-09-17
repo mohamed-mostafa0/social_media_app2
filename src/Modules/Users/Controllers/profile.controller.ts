@@ -24,4 +24,6 @@ profileController.get("/:id" , profileService.getProfile)
 
 profileController.post("/list-requests" , authentication , profileService.listRequests)
 
+profileController.patch("/respond-to-friend-request" , authentication , profileService.respondToFriendRequest)
+
 
