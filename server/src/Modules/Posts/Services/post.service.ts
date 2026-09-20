@@ -1,0 +1,59 @@
+import type { Request, Response } from "express";
+import { friendshipStatusEnum, type IPost, type IRequest } from "../../../Common/index.js";
+import { FriendshipRepository, PostRepository, UserRepository } from "../../../DB/Repositories/index.js";
+import { BadRequestException, successResponse, uploadImageOnCloudinary, uploadImagesOnCloudinary } from "../../../Utils/index.js";
+import { UserModel } from "../../../DB/Models/index.js";
+import type { Types } from "mongoose";
+import type { UploadApiResponse } from "cloudinary";
+
+
+
+
+class PostService {
+
+    private postRepo:PostRepository = new PostRepository()
+    private userRepo:UserRepository = new UserRepository(UserModel)
+    private friendshipRepo:FriendshipRepository = new FriendshipRepository()
+
+
+    addPost = async(req:Request, res:Response)=>{
+        const {user:{_id}} = (req as IRequest).loggedInUser
+        const {describtion , allowComments , tags}:IPost = req.body
+        const files = req.files as Express.Multer.File[] | undefined
+
+        if(!describtion && (!files || files.length === 0)) throw new BadRequestException("Describtion or files is required")
+
+        let finalTags = tags;
+        if(tags && tags.length){
+            finalTags = Array.from(new Set(tags))
+            
+            const users = await this.userRepo.findDocuments({_id:{$in:finalTags as Types.ObjectId[]}})
+            if(users.length !== finalTags.length) throw new BadRequestException("Some tagged users do not exist")
+
+            const friendships = await this.friendshipRepo.findDocuments({
+                status:friendshipStatusEnum.ACCEPTED,
+                $or:[
+                    {requestFromId:_id , requestToId:{$in:finalTags as Types.ObjectId[]}},
+                    {requestToId:_id , requestFromId:{$in:finalTags as Types.ObjectId[]}}
+                ]
+            })
+
+            if(friendships.length !== finalTags.length) throw new BadRequestException("You can only tag friends who have accepted your friend request")  
+        }
+
+        let attachments: string[] = [];
+        if(files?.length){
+            const filePaths = files.map(file => file.path)
+            const uploadResponses = await uploadImagesOnCloudinary(filePaths , "posts")
+            attachments = uploadResponses.map(response => response.secure_url)
+        }
+
+        const post = await this.postRepo.createDocument({
+            describtion , attachments , allowComments , tags: finalTags , ownerId:_id
+        })
+
+        return res.status(201).json(successResponse("Post added successfully" , 201 , post))
+    }
+}
+
+export default new PostService()
