@@ -2,112 +2,119 @@
 
 import { motion } from "framer-motion";
 import { Avatar } from "../ui/Avatar";
-import { Button } from "../ui/Button";
-import { FiUserPlus } from "react-icons/fi";
+import { FiEdit, FiSearch, FiMoreVertical, FiCalendar, FiGift } from "react-icons/fi";
+import { useState } from "react";
 
-const requests = [
-  { name: "Lauralee Quintero", action: "wants to add you to friends", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&q=80" },
-  { name: "Brittni Landema", action: "wants to add you to friends", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&q=80" },
+const messages = [
+  { name: "Roger Korsgaard", avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop", online: true },
+  { name: "Terry Torff", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop", online: true },
+  { name: "Angel Bergson", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop", online: true },
+  { name: "Emerson Gouse", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop", online: true },
+  { name: "Corey Baptista", avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop", online: true },
+  { name: "Zain Culhane", avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop", online: true },
+  { name: "Randy Lipshutz", avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop", online: true },
+  { name: "Craig Botosh", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop", online: true },
 ];
 
-const suggestions = [
-  { name: "Chantal Shelburne", location: "Memphis, TN, US", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&q=80" },
-  { name: "Marci Senter", location: "Newark, NJ, US", avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop&q=80", online: true },
-  { name: "Janetta Rotolo", location: "Fort Worth, TX, US", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&q=80" },
-  { name: "Tyra Dhillon", location: "Springfield, MA, US", avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&q=80" },
-  { name: "Marielle Wigington", location: "Honolulu, HI, US", avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop&q=80", online: true },
+const events = [
+  { title: "10 Events Invites", icon: FiCalendar },
+  { title: "Design System Collaboration", subtitle: "Thu - Harpoon Mall, YK", icon: FiCalendar },
+  { title: "Web Dev 2.0 Meetup", subtitle: "Yoshkar-Ola, Russia", icon: FiCalendar },
+  { title: "Prada's Invitation Birthday", subtitle: "Sat - Grand Hotel", icon: FiGift },
 ];
 
 export function RightSidebar() {
+  const [activeTab, setActiveTab] = useState("Primary");
+
   return (
-    <aside className="w-80 h-screen sticky top-0 flex flex-col pt-8 pb-4 pl-6 border-l border-gray-100 overflow-y-auto">
+    <aside className="w-80 h-[calc(100vh-65px)] sticky top-[65px] flex flex-col pt-6 pb-4 pl-6 overflow-y-auto scrollbar-hide">
       
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-4">
-          <h3 className="text-lg font-bold text-gray-900">Requests</h3>
-          <span className="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-0.5 rounded-full">2</span>
+      <div className="bg-white rounded-2xl p-5 mb-6 shadow-sm border border-gray-100 flex-1 flex flex-col min-h-0">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-bold text-gray-900">Messages</h3>
+          <button className="text-gray-400 hover:text-gray-900 transition-colors">
+            <FiEdit className="w-4 h-4" />
+          </button>
         </div>
-        <div className="space-y-4">
-          {requests.map((req, i) => (
+
+        <div className="relative mb-4">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <FiSearch className="h-4 w-4 text-gray-400" />
+          </div>
+          <input
+            type="text"
+            className="block w-full pl-9 pr-3 py-2 bg-gray-50 border-transparent rounded-xl text-xs placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-200 transition-colors outline-none"
+            placeholder="Search"
+          />
+        </div>
+
+        <div className="flex gap-4 border-b border-gray-100 mb-4 text-xs font-semibold">
+          <button 
+            onClick={() => setActiveTab("Primary")}
+            className={`pb-2 transition-colors relative ${activeTab === "Primary" ? "text-gray-900" : "text-gray-400 hover:text-gray-600"}`}
+          >
+            Primary
+            {activeTab === "Primary" && <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900" />}
+          </button>
+          <button 
+            onClick={() => setActiveTab("General")}
+            className={`pb-2 transition-colors relative ${activeTab === "General" ? "text-gray-900" : "text-gray-400 hover:text-gray-600"}`}
+          >
+            General
+            {activeTab === "General" && <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900" />}
+          </button>
+          <button 
+            onClick={() => setActiveTab("Requests")}
+            className={`pb-2 transition-colors relative ${activeTab === "Requests" ? "text-blue-500" : "text-blue-400 hover:text-blue-600"}`}
+          >
+            Requests(4)
+            {activeTab === "Requests" && <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500" />}
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4">
+          {messages.map((msg, i) => (
             <motion.div 
-              key={req.name}
+              key={msg.name}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="flex gap-3"
+              transition={{ delay: i * 0.05 }}
+              className="flex items-center gap-3 cursor-pointer group"
             >
-              <Avatar size="md" src={req.avatar} />
-              <div>
-                <p className="text-sm text-gray-600">
-                  <span className="font-semibold text-gray-900 mr-1">{req.name}</span>
-                  {req.action}
-                </p>
-                <div className="flex gap-3 mt-2">
-                  <button className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">Accept</button>
-                  <button className="text-sm font-semibold text-gray-400 hover:text-gray-600 transition-colors">Decline</button>
-                </div>
-              </div>
+              <Avatar size="sm" src={msg.avatar} online={msg.online} />
+              <p className="text-xs font-semibold text-gray-700 group-hover:text-gray-900 transition-colors">
+                {msg.name}
+              </p>
             </motion.div>
           ))}
         </div>
-      </div>
-
-      <div className="mb-8">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Suggestions for you</h3>
-        <ul className="space-y-4">
-          {suggestions.map((suggestion, i) => (
-            <motion.li 
-              key={suggestion.name}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 + (i * 0.1) }}
-              className="flex items-center justify-between"
-            >
-              <div className="flex items-center gap-3">
-                <Avatar size="md" src={suggestion.avatar} online={suggestion.online} />
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">{suggestion.name}</p>
-                  <p className="text-xs text-gray-500">{suggestion.location}</p>
-                </div>
-              </div>
-              <Button variant="ghost" size="sm" className="!p-2 text-blue-600 rounded-full hover:bg-blue-50">
-                <FiUserPlus className="w-4 h-4" />
-              </Button>
-            </motion.li>
-          ))}
-        </ul>
-        <button className="w-full text-center text-sm font-medium text-blue-600 mt-4 hover:underline">
+        
+        <button className="text-xs font-semibold text-gray-500 mt-4 text-left hover:text-gray-800 transition-colors pt-2 border-t border-gray-50">
           View All
         </button>
       </div>
 
-      <div className="bg-gray-50 rounded-2xl p-4 mb-6 flex flex-col items-center relative overflow-hidden">
-        <div className="flex -space-x-2 mb-3 z-10">
-          {[1,2,3,4,5].map((num) => (
-            <div key={num} className="w-8 h-8 rounded-full border-2 border-white bg-gray-300 relative overflow-hidden">
-              <img src={`https://images.unsplash.com/photo-${1500000000000 + num * 1000}?w=50&h=50&fit=crop`} alt="" className="w-full h-full object-cover" />
-            </div>
+      <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex-shrink-0">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-bold text-gray-900">Events</h3>
+          <button className="text-gray-400 hover:text-gray-900 transition-colors">
+            <FiMoreVertical className="w-4 h-4" />
+          </button>
+        </div>
+
+        <ul className="space-y-4">
+          {events.map((event, i) => (
+            <li key={i} className="flex gap-3 cursor-pointer group">
+              <event.icon className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0 group-hover:text-blue-500 transition-colors" />
+              <div>
+                <p className="text-xs font-semibold text-gray-900">{event.title}</p>
+                {event.subtitle && <p className="text-[10px] text-gray-500 mt-0.5">{event.subtitle}</p>}
+              </div>
+            </li>
           ))}
-          <div className="w-8 h-8 rounded-full border-2 border-white bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-600 z-10">
-            +
-          </div>
-        </div>
-        <p className="text-xl font-bold text-gray-900 z-10">184.3K <span className="text-sm font-normal text-gray-500">Followers</span></p>
-        <p className="text-xs text-gray-500 mt-1 z-10">Active now on your profile</p>
-        
-        <div className="absolute top-2 right-2 text-gray-200">
-           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
-        </div>
+        </ul>
       </div>
 
-      <div className="mt-auto pt-4 text-xs text-gray-400 flex flex-wrap gap-x-3 gap-y-2">
-        <a href="#" className="hover:text-gray-600 transition-colors">About</a>
-        <a href="#" className="hover:text-gray-600 transition-colors">Accessibility</a>
-        <a href="#" className="hover:text-gray-600 transition-colors">Help Center</a>
-        <a href="#" className="hover:text-gray-600 transition-colors">Privacy and Terms</a>
-        <a href="#" className="hover:text-gray-600 transition-colors">Advertising</a>
-        <a href="#" className="hover:text-gray-600 transition-colors">Business Services</a>
-      </div>
     </aside>
   );
 }
