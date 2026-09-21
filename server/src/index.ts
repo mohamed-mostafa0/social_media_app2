@@ -1,9 +1,11 @@
 import 'dotenv/config'
+import cors from "cors"
+import morgan from 'morgan'
+import fs from 'fs'
 import express, { type NextFunction, type Request, type Response } from "express"
 import * as controllers from './Modules/index.js'
 import { dbConnection } from './DB/db.connection.js'
 import { failedResponse, HttpException } from './Utils/index.js'
-import cors from "cors"
 
 
 const app = express()
@@ -16,6 +18,9 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
+app.use(morgan("dev"))
+var accessLogStream = fs.createWriteStream('access.log')
+app.use(morgan('dev', { stream: accessLogStream }))
 
 
 app.use("/api/auth", controllers.authController)
