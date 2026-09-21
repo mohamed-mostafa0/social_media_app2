@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { type PaginateModel } from "mongoose";
 import type { IPost } from "../../Common/index.js";
+import mongoosePaginate from "mongoose-paginate-v2"
 
 
 
@@ -23,4 +24,6 @@ const postSchema = new mongoose.Schema<IPost>({
     ]
 })
 
-export const PostModel = mongoose.model<IPost>("Post" , postSchema)
+postSchema.plugin(mongoosePaginate)
+
+export const PostModel = mongoose.model<IPost , PaginateModel<IPost>>("Post" , postSchema)

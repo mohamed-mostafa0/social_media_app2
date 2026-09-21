@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { friendshipStatusEnum, type IPost, type IRequest } from "../../../Common/index.js";
 import { FriendshipRepository, PostRepository, UserRepository } from "../../../DB/Repositories/index.js";
-import { BadRequestException, successResponse, uploadImageOnCloudinary, uploadImagesOnCloudinary } from "../../../Utils/index.js";
+import { BadRequestException, pagination, successResponse, uploadImageOnCloudinary, uploadImagesOnCloudinary } from "../../../Utils/index.js";
 import { UserModel } from "../../../DB/Models/index.js";
 import type { Types } from "mongoose";
 import type { UploadApiResponse } from "cloudinary";
@@ -53,6 +53,17 @@ class PostService {
         })
 
         return res.status(201).json(successResponse("Post added successfully" , 201 , post))
+    }
+
+
+    listHomePosts = async (req:Request , res:Response)=>{
+        const {page , limit} = req.query
+        const {user:{_id}} = (req as IRequest).loggedInUser
+
+        const{limit:currentLimit , skip} = pagination({limit:Number(limit) , page:Number(page)})
+        const posts = await this.postRepo.postPagination({} , {limit:currentLimit , page:Number(page)})
+
+        return res.status(200).json(successResponse("" , 200 , posts))
     }
 }
 

@@ -1,8 +1,9 @@
 import {Router} from "express"
 import postService from './Services/post.service.js'
-import { authentication } from "../../Middlewares/index.js"
+import { authentication, uploadImage } from "../../Middlewares/index.js"
 
 export const PostController = Router()
 
 
-PostController.post("/add-post" , authentication , postService.addPost)
+PostController.post("/add" , authentication , uploadImage().array("images") , postService.addPost)
+PostController.get("/home" , authentication , postService.listHomePosts)
