@@ -1,0 +1,21 @@
+import { UserType } from "../../Types/user.types.js";
+import { GetProfileArgsType } from "../../Args/user.args.js";
+import UserResolver from "../../Resolvers/user.resolver.js";
+
+
+class UserQuery {
+
+    private userResolver: UserResolver = new UserResolver()
+
+    register() {
+        return {
+            getProfile: {
+                type: UserType,
+                args: GetProfileArgsType,
+                resolve: this.userResolver.getProfile
+            }
+        }
+    }
+}
+
+export default new UserQuery()

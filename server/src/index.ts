@@ -6,6 +6,10 @@ import express, { type NextFunction, type Request, type Response } from "express
 import * as controllers from './Modules/index.js'
 import { dbConnection } from './DB/db.connection.js'
 import { failedResponse, HttpException } from './Utils/index.js'
+import { createHandler } from 'graphql-http/lib/use/express'
+import { MainSchema } from './GraphQl/main.gql.js'
+import { authentication } from './Middlewares/authentication.middleware.js'
+import type { IRequest } from './Common/index.js'
 
 
 const app = express()
@@ -22,6 +26,7 @@ app.use(morgan("dev"))
 var accessLogStream = fs.createWriteStream('access.log')
 app.use(morgan('dev', { stream: accessLogStream }))
 
+app.all("/graphql" , authentication ,createHandler({schema:MainSchema , context:(req)=>({user: (req.raw as IRequest).loggedInUser}) }))
 
 app.use("/api/auth", controllers.authController)
 app.use("/api/profile", controllers.profileController)
