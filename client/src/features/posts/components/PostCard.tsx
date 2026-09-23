@@ -2,27 +2,24 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Avatar } from "../ui/Avatar";
-import { IconButton } from "../ui/IconButton";
+import { Avatar } from "@/components/ui/Avatar";
+import { IconButton } from "@/components/ui/IconButton";
 import { FiMoreVertical, FiHeart, FiMessageCircle, FiBookmark, FiShare2 } from "react-icons/fi";
+import { PostAuthor } from "../types/post.types";
 
-interface PostCardProps {
-  author: {
-    name: string;
-    date?: string;
-    handle?: string;
-    avatar: string;
-  };
+export interface PostCardProps {
+  id?: string | number;
+  author: PostAuthor;
   content: string;
   tags: string[];
   images: string[];
-  likes: string;
-  comments: string;
-  shares?: string;
+  likes: string | number;
+  comments: string | number;
+  shares?: string | number;
 }
 
 export function PostCard({ author, content, tags, images, likes, comments, shares = "0" }: PostCardProps) {
-  const ref = useRef(null);
+  const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (

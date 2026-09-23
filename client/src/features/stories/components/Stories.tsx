@@ -3,8 +3,9 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { FiPlus } from "react-icons/fi";
+import { StoryItem } from "../types/story.types";
 
-const stories = [
+const stories: StoryItem[] = [
   { name: "Your Story", avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=200&h=200&fit=crop", isUser: true },
   { name: "Justin Rosser", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop" },
   { name: "Davis Dorwart", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop" },
@@ -16,7 +17,7 @@ const stories = [
 ];
 
 export function Stories() {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-50px" });
 
   const containerVariants = {

@@ -1,11 +1,12 @@
 "use client";
 
-import { Stories } from "./Stories";
+import { Stories } from "@/features/stories/components/Stories";
 import { CreatePost } from "./CreatePost";
 import { PostCard } from "./PostCard";
 import { FiChevronDown } from "react-icons/fi";
+import { Post } from "../types/post.types";
 
-const samplePosts = [
+const samplePosts: Post[] = [
   {
     id: 1,
     author: {
@@ -44,9 +45,7 @@ const samplePosts = [
 export function MainFeed() {
   return (
     <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      
       <Stories />
-      
       <CreatePost />
 
       <div className="flex items-center justify-end mb-4">

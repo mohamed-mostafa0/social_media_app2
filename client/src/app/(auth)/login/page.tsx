@@ -7,8 +7,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { authApi } from "@/api/auth.api";
+import { authService } from "@/features/auth/api/auth.service";
 import { useFormik } from "formik";
+import { isAxiosError } from "axios";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function LoginPage() {
       setError("");
       
       try {
-        const data = await authApi.login(values);
+        const data = await authService.login(values);
         console.log(data.data.data);
 
         if (data.data?.data?.accessToken) {
@@ -35,8 +36,14 @@ export default function LoginPage() {
         } else {
           throw new Error("Invalid response from server");
         }
-      } catch (err: any) {
-        setError(err.response?.data?.message || err.message || "Something went wrong");
+      } catch (err: unknown) {
+        if (isAxiosError(err)) {
+          setError(err.response?.data?.message || err.message || "Something went wrong");
+        } else if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Something went wrong");
+        }
       } finally {
         setSubmitting(false);
       }
@@ -106,7 +113,7 @@ export default function LoginPage() {
       </form>
 
       <p className="text-center text-sm text-gray-600 mt-8 font-medium">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link href="/register" className="text-blue-600 hover:text-blue-700 font-bold">
           Sign up
         </Link>

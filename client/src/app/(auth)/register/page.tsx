@@ -7,14 +7,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { authApi } from "@/api/auth.api";
+import { authService } from "@/features/auth/api/auth.service";
+import { RegisterPayload } from "@/features/auth/types/auth.types";
 import { useFormik } from "formik";
+import { isAxiosError } from "axios";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [error, setError] = useState("");
 
-  const formik = useFormik({
+  const formik = useFormik<RegisterPayload>({
     initialValues: {
       firstName: "",
       lastName: "",
@@ -26,10 +28,16 @@ export default function RegisterPage() {
     onSubmit: async (values, { setSubmitting }) => {
       setError("");
       try {
-        await authApi.register(values);
+        await authService.register(values);
         router.push("/login");
-      } catch (err: any) {
-        setError(err.response?.data?.message || err.message || "Something went wrong");
+      } catch (err: unknown) {
+        if (isAxiosError(err)) {
+          setError(err.response?.data?.message || err.message || "Something went wrong");
+        } else if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Something went wrong");
+        }
       } finally {
         setSubmitting(false);
       }

@@ -1,8 +1,8 @@
 "use client";
 
 import { FiImage, FiPaperclip, FiVideo, FiHash, FiAtSign, FiChevronDown, FiSmile } from "react-icons/fi";
-import { Button } from "../ui/Button";
-import { Avatar } from "../ui/Avatar";
+import { Button } from "@/components/ui/Button";
+import { Avatar } from "@/components/ui/Avatar";
 
 export function CreatePost() {
   return (
