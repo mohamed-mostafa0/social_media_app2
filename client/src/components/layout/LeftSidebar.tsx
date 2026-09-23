@@ -13,6 +13,7 @@ import {
 } from "react-icons/fi";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuthStore } from "@/features/auth/stores/auth.store";
 
 const navItems = [
   { name: "Feed", icon: FiHome, path: "/", badge: 0 },
@@ -33,19 +34,22 @@ const pages = [
 
 export function LeftSidebar() {
   const pathname = usePathname();
+  const user = useAuthStore((state) => state.user);
 
   return (
     <aside className="w-75 h-[calc(100vh-65px)] sticky top-[65px] flex flex-col pl-5 pt-6 pb-4 pr-3 overflow-y-auto scrollbar-hide">
       
       <div className="bg-white rounded-2xl p-5 mb-6 shadow-sm border border-gray-100">
         <div className="flex items-center gap-3 mb-5">
-          <Avatar size="md" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop" />
+          <Avatar size="md" src={user?.profilePicture || "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop"} />
           <div>
             <h2 className="text-sm font-bold text-gray-900 flex items-center gap-1">
-              Jakob Botosh
-              <span className="bg-blue-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center text-[8px]">✓</span>
+              {user ? `${user.firstName} ${user.lastName}` : "Guest User"}
+              {user?.isVerified && (
+                <span className="bg-blue-500 text-white rounded-full w-3.5 h-3.5 flex items-center justify-center text-[8px]">✓</span>
+              )}
             </h2>
-            <p className="text-xs text-gray-500">@jakobbtsh</p>
+            <p className="text-xs text-gray-500">{user?.email ? `@${user.email.split('@')[0]}` : "@guest"}</p>
           </div>
         </div>
         

@@ -8,14 +8,17 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { authService } from "@/features/auth/api/auth.service";
+import { LoginCredentials } from "@/features/auth/types/auth.types";
 import { useFormik } from "formik";
 import { isAxiosError } from "axios";
+import { useAuthStore } from "@/features/auth/stores/auth.store";
 
 export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
+  const setAuth = useAuthStore((state) => state.setAuth);
 
-  const formik = useFormik({
+  const formik = useFormik<LoginCredentials>({
     initialValues: {
       email: "",
       password: "",
@@ -25,13 +28,16 @@ export default function LoginPage() {
       
       try {
         const data = await authService.login(values);
-        console.log(data.data.data);
+        console.log(data);
+        
+        const responseData = data.data?.data;
 
-        if (data.data?.data?.accessToken) {
-          localStorage.setItem("accessToken", data.data.data.accessToken);
-          if (data.data?.data?.refreshToken) {
-            localStorage.setItem("refreshToken", data.data.data.refreshToken);
-          }
+        if (responseData?.accessToken) {
+          setAuth({
+            accessToken: responseData.accessToken,
+            refreshToken: responseData.refreshToken,
+            user: responseData.user,
+          });
           router.push("/");
         } else {
           throw new Error("Invalid response from server");

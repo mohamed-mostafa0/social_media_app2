@@ -1,11 +1,14 @@
 "use client";
 
 import { FiSearch, FiBell, FiBookmark } from "react-icons/fi";
-import { Avatar } from "../ui/Avatar";
 import { IconButton } from "../ui/IconButton";
 import Link from "next/link";
+import { useAuthStore } from "@/features/auth/stores/auth.store";
+import { UserNavDropdown } from "./UserNavDropdown";
 
 export function TopNavbar() {
+  const isAuth = useAuthStore((state) => state.isAuth);
+
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-100 px-6 py-3 flex items-center justify-between">
       <Link href="/" className="flex items-center gap-2 flex-shrink-0">
@@ -47,10 +50,16 @@ export function TopNavbar() {
 
         <div className="h-8 w-px bg-gray-200 mx-1" />
 
-        <div className="flex items-center gap-3 ml-1 cursor-pointer hover:bg-gray-50 py-1 px-2 rounded-full transition-colors">
-          <Avatar size="sm" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop" />
-          <span className="text-sm font-semibold text-gray-900 hidden sm:block">Jakob Botosh</span>
-        </div>
+        {isAuth ? (
+          <UserNavDropdown />
+        ) : (
+          <Link
+            href="/login"
+            className="text-sm font-semibold text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-3.5 py-1.5 rounded-xl transition-colors"
+          >
+            Sign in
+          </Link>
+        )}
       </div>
     </header>
   );

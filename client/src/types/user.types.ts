@@ -6,6 +6,8 @@ export interface User {
   gender?: 'male' | 'female';
   phoneNumber?: string;
   avatar?: string;
+  profilePicture?: string;
+  coverPicture?: string;
   handle?: string;
   bio?: string;
   followersCount?: number;
