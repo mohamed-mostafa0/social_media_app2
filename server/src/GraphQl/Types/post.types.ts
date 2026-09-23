@@ -2,7 +2,7 @@ import { GraphQLBoolean, GraphQLID, GraphQLInt, GraphQLList, GraphQLObjectType, 
 import { UserType } from "./user.types.js";
 
 
-export const PostType = new GraphQLObjectType({
+export const PostType: GraphQLObjectType = new GraphQLObjectType({
     name: "PostType",
     fields: () => ({
         _id: { type: GraphQLID },
@@ -12,12 +12,27 @@ export const PostType = new GraphQLObjectType({
         commentsCount: { type: GraphQLInt },
         owner: {
             type: UserType,
-            // ownerId is the stored field — the resolver populates it as "owner"
             resolve: (post: any) => post.ownerId
         },
         tags: {
             type: new GraphQLList(UserType),
             resolve: (post: any) => post.tags ?? []
         }
+    })
+})
+
+export const PaginatedPostType: GraphQLObjectType = new GraphQLObjectType({
+    name: "PaginatedPostType",
+    fields: () => ({
+        docs: { type: new GraphQLList(PostType) },
+        totalDocs: { type: GraphQLInt },
+        limit: { type: GraphQLInt },
+        totalPages: { type: GraphQLInt },
+        page: { type: GraphQLInt },
+        pagingCounter: { type: GraphQLInt },
+        hasPrevPage: { type: GraphQLBoolean },
+        hasNextPage: { type: GraphQLBoolean },
+        prevPage: { type: GraphQLInt },
+        nextPage: { type: GraphQLInt }
     })
 })

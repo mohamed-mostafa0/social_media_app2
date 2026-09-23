@@ -1,6 +1,7 @@
 import { UserType } from "../../Types/user.types.js";
 import { GetProfileArgsType } from "../../Args/user.args.js";
 import UserResolver from "../../Resolvers/user.resolver.js";
+import { GraphQLString } from "graphql";
 
 
 class UserQuery {

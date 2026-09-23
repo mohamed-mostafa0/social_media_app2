@@ -75,7 +75,11 @@ class AuthService {
             expiresIn:process.env.REFRESH_TOKEN_EXPIRATION_TIME as SignOptions['expiresIn']
         })
 
-        return res.status(200).json(successResponse("Logged In" , 200 , {accessToken , refreshToken}))
+        const userResponse = typeof (user as any).toObject === 'function' ? (user as any).toObject() : { ...user };
+        delete userResponse.password;
+        delete userResponse.OTPs;
+
+        return res.status(200).json(successResponse("Logged In" , 200 , {accessToken , refreshToken , user: userResponse}))
     }
 
 

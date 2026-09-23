@@ -1,6 +1,8 @@
-import { GraphQLNonNull, GraphQLString } from "graphql";
+import { GraphQLInt} from "graphql";
 
 
 export const GetProfileArgsType = {
-    userId: { type: new GraphQLNonNull(GraphQLString) }
+    page: { type:GraphQLInt , defaultValue:1 },
+    limit:{type:GraphQLInt , defaultValue:10}
+    
 }
