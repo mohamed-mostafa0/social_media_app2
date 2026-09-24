@@ -5,5 +5,5 @@ import { authentication, uploadImage } from "../../Middlewares/index.js"
 export const PostController = Router()
 
 
-PostController.post("/add" , authentication , uploadImage().array("images") , postService.addPost)
-PostController.get("/home" , authentication , postService.listHomePosts)
+// PostController.post("/add" , authentication , uploadImage().array("images") , postService.addPost)
+// PostController.get("/home" , authentication , postService.listHomePosts)

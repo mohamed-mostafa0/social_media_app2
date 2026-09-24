@@ -1,14 +1,13 @@
-import type { Model } from "mongoose"
-import type { IFriendship } from "../../Common/index.js"
+import type { IFollow } from "../../Common/index.js"
 import { BaseRepository } from "./base.repository.js"
-import { FriendshipModel } from "../Models/friendship.model.js"
+import { FollowModel } from "../Models/friendship.model.js"
 
 
 
 
-export class FriendshipRepository extends BaseRepository<IFriendship> {
+export class FollowRepository extends BaseRepository<IFollow> {
 
     constructor(){
-        super(FriendshipModel)
+        super(FollowModel)
     }
 }

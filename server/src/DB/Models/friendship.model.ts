@@ -1,28 +1,48 @@
 import mongoose from "mongoose";
-import { friendshipStatusEnum, type IFriendship } from "../../Common/index.js";
+import { followStatusEnum, type IFollow } from "../../Common/index.js";
 
 
 
-const friendshipSchema = new mongoose.Schema<IFriendship>({
-    requestFromId:{
+const followSchema = new mongoose.Schema<IFollow>({
+    followFromId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     },
-    requestToId:{
+    followToId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     },
+    // requestFromId:{
+    //     type:mongoose.Schema.Types.ObjectId,
+    //     ref:"User"
+    // },
+    // requestToId:{
+    //     type:mongoose.Schema.Types.ObjectId,
+    //     ref:"User"
+    // },
     status:{
         type:String,
-        enum:friendshipStatusEnum,
-        default:friendshipStatusEnum.PENDING
+        enum:followStatusEnum,
+        // default:followStatusEnum.PENDING
     }
 },{timestamps:true})
 
-friendshipSchema.index({
-    requestFromId:1,
-    requestToId:1
+followSchema.index({
+    folloFromId:1,
+    followToId:1
+})
+// followSchema.index({
+//     requestFromId:1,
+//     requestToId:1
+// })
+
+followSchema.pre("save" , async function(){
+    if(!this.status){
+        const targetUser = await mongoose.model("User").findById(this.followToId).select("isPrivate")
+
+        this.status = targetUser?.isPrivate ? followStatusEnum.PENDING : followStatusEnum.ACCEPTED
+    }
 })
 
 
-export const FriendshipModel = mongoose.model<IFriendship>("Friendship" , friendshipSchema)
+export const FollowModel = mongoose.model<IFollow>("Follow" , followSchema)

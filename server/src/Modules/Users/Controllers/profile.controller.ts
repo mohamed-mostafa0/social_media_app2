@@ -18,12 +18,13 @@ profileController.post("/upload-cover-picture",
     validateImage, 
     profileService.uploadCoverPicture )
     
-profileController.post("/send-friend-request" , authentication , profileService.sendFriendShipRequest)
+// profileController.post("/send-friend-request" , authentication , profileService.sendFriendShipRequest)
+profileController.post("/toggle-follow/:followToId" , authentication , profileService.toggleFollow)
 
 profileController.get("/:id" , profileService.getProfile)
 
-profileController.post("/list-requests" , authentication , profileService.listRequests)
+// profileController.post("/list-requests" , authentication , profileService.listRequests)
 
-profileController.patch("/respond-to-friend-request" , authentication , profileService.respondToFriendRequest)
+// profileController.patch("/respond-to-friend-request" , authentication , profileService.respondToFriendRequest)
 
 

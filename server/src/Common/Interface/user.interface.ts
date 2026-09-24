@@ -1,5 +1,5 @@
 import type { Document, Types } from "mongoose"
-import type { friendshipStatusEnum, GenderEnum, OtpTypeEnum, ProviderEnum, RoleEnum } from "../index.js"
+import type { followStatusEnum, GenderEnum, OtpTypeEnum, ProviderEnum, RoleEnum } from "../index.js"
 import type { Request } from "express"
 import type { JwtPayload } from "jsonwebtoken"
 
@@ -29,7 +29,15 @@ export interface IUser extends Document {
     googleId?: string,
     phoneNumber?: string,
     isVerified?: boolean,
-    OTPs?: IOTP[]
+    OTPs?: IOTP[],
+    followersCount?:number,
+    followingCount?:number,
+    postsCount?:number,
+    isPrivate?:boolean,
+    isOnline?:boolean,
+    isDeleted?:boolean,
+    isDeactivated?:boolean
+
 }
 
 
@@ -49,8 +57,13 @@ export interface IRequest extends Request {
     loggedInUser: { user: IUser, token: JwtPayload }
 }
 
-export interface IFriendship extends Document {
-    requestFromId: Types.ObjectId,
-    requestToId: Types.ObjectId,
-    status: friendshipStatusEnum
+export interface IFollow extends Document {
+    followFromId: Types.ObjectId,
+    followToId: Types.ObjectId,
+    status: followStatusEnum
 }
+// export interface IFriendship extends Document {
+//     requestFromId: Types.ObjectId,
+//     requestToId: Types.ObjectId,
+//     status: friendshipStatusEnum
+// }

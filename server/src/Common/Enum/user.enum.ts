@@ -20,8 +20,8 @@ export enum RoleEnum{
     ADMIN = "admin"
 }
 
-export enum friendshipStatusEnum{
+export enum followStatusEnum{
     PENDING = "pending",
     ACCEPTED = "accepted",
-    REJECTED = "rejected"
+    // REJECTED = "rejected"
 }

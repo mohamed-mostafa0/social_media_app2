@@ -60,7 +60,37 @@ const userSchema = new mongoose.Schema<IUser>({
         value: { type: String, required: true },
         expiresAt: { type: Date, default: Date.now() + 600000 },
         otpType: { type: String, enum: OtpTypeEnum, required: true }
-    }]
+    }],
+    followersCount: {
+        type: Number,
+        default: 0
+    },
+    followingCount: {
+        type: Number,
+        default: 0
+    },
+    postsCount: {
+        type: Number,
+        default: 0
+    },
+    isPrivate: {
+        type: Boolean,
+        default: false
+    },
+    isOnline: {
+        type: Boolean,
+        default: false
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    isDeactivated: {
+        type: Boolean,
+        default: false
+    }
+}, {
+    timestamps: true
 })
 
 
