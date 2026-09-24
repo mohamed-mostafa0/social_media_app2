@@ -21,10 +21,10 @@ profileController.post("/upload-cover-picture",
 // profileController.post("/send-friend-request" , authentication , profileService.sendFriendShipRequest)
 profileController.post("/toggle-follow/:followToId" , authentication , profileService.toggleFollow)
 
-profileController.get("/:id" , profileService.getProfile)
+profileController.get("/profile/:id" , profileService.getProfile)
 
-// profileController.post("/list-requests" , authentication , profileService.listRequests)
+profileController.get("/list-requests" , authentication , profileService.listRequests)
 
-// profileController.patch("/respond-to-friend-request" , authentication , profileService.respondToFriendRequest)
+profileController.patch("/respond-to-follow-request", authentication, profileService.respondToFollowRequest)
 
 
