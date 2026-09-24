@@ -18,7 +18,6 @@ profileController.post("/upload-cover-picture",
     validateImage, 
     profileService.uploadCoverPicture )
     
-// profileController.post("/send-friend-request" , authentication , profileService.sendFriendShipRequest)
 profileController.post("/toggle-follow/:followToId" , authentication , profileService.toggleFollow)
 
 profileController.get("/profile/:id" , profileService.getProfile)

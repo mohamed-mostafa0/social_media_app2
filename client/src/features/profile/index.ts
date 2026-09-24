@@ -11,3 +11,7 @@ export * from "./components/ProfileCreatePost";
 export * from "./components/ProfilePostCard";
 export * from "./components/ProfileFeed";
 export * from "./components/ProfileView";
+export * from "./components/FollowRequestsList";
+export * from "./types/request.types";
+export * from "./api/follow.service";
+export * from "./hooks/useFollowRequests";

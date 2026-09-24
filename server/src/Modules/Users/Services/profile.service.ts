@@ -90,31 +90,6 @@ class ProfileService {
         return res.json(successResponse("Profile Updated Successfully", 200))
     }
 
-
-
-    // listRequests = async(req:Request , res:Response)=>{
-    //     const {user:{_id}} = (req as IRequest).loggedInUser
-    //     const {status} = req.query
-
-    //     const filters:QueryFilter<IFriendship> = {status : status? status as friendshipStatusEnum : friendshipStatusEnum.PENDING}
-    //     if(filters.status === friendshipStatusEnum.ACCEPTED) filters.$or = [{requestToId:_id} , {requestFromId:_id}]
-    //     else filters.requestToId = _id
-
-    //     const requests = await this.friendshipRepo.findDocuments(filters , undefined , {
-    //         populate:[
-    //             {
-    //                 path:"requestToId",
-    //                 select:"firstName lastName profilePicture"
-    //             },
-    //             {
-    //                 path:"requestFromId",
-    //                 select:"firstName lastName profilePicture"
-    //             }
-    //         ]
-    //     })
-    //     return res.status(200).json(successResponse("Requests fetched successfully" , 200 , requests))
-    // }
-
     toggleFollow = async (req: Request, res: Response) => {
         const { user } = (req as IRequest).loggedInUser;
         const { followToId } = req.params;
@@ -229,7 +204,7 @@ class ProfileService {
 
 
 
-
+    
 }
 
 

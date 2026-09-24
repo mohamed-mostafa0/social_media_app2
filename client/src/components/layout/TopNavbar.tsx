@@ -4,10 +4,12 @@ import { FiSearch, FiBell, FiBookmark } from "react-icons/fi";
 import { IconButton } from "../ui/IconButton";
 import Link from "next/link";
 import { useAuthStore } from "@/features/auth/stores/auth.store";
+import { useFollowRequests } from "@/features/profile";
 import { UserNavDropdown } from "./UserNavDropdown";
 
 export function TopNavbar() {
   const isAuth = useAuthStore((state) => state.isAuth);
+  const { data: requests = [] } = useFollowRequests();
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-100 px-6 py-3 flex items-center justify-between">
@@ -37,12 +39,14 @@ export function TopNavbar() {
       </div>
 
       <div className="flex items-center gap-3 flex-shrink-0">
-        <div className="relative">
+        <Link href="/friends" className="relative block" title="Follow Requests">
           <IconButton variant="ghost" size="md">
             <FiBell className="w-5 h-5" />
           </IconButton>
-          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white" />
-        </div>
+          {requests.length > 0 && (
+            <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white ring-1 ring-red-400/50 animate-pulse" />
+          )}
+        </Link>
         
         <IconButton variant="ghost" size="md">
           <FiBookmark className="w-5 h-5" />

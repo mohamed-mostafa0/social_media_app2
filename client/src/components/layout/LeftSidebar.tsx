@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/features/auth/stores/auth.store";
+import { useFollowRequests } from "@/features/profile";
 
 const navItems = [
   { name: "Feed", icon: FiHome, path: "/", badge: 0 },
@@ -35,6 +36,7 @@ const pages = [
 export function LeftSidebar() {
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
+  const { data: requests = [] } = useFollowRequests();
 
   return (
     <aside className="w-75 h-[calc(100vh-65px)] sticky top-[65px] flex flex-col pl-5 pt-6 pb-4 pr-3 overflow-y-auto scrollbar-hide">
@@ -87,11 +89,13 @@ export function LeftSidebar() {
                     <item.icon className={`w-4 h-4 ${isActive ? "text-white" : "text-gray-400"}`} />
                     <span className="text-sm">{item.name}</span>
                   </div>
-                  {item.badge > 0 && (
+                  {((item.name === "Friends" ? requests.length : item.badge) > 0) && (
                     <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-                      isActive ? "bg-white text-blue-600" : "bg-red-500 text-white"
-                    } ${item.name === "Files" && !isActive ? "!bg-purple-500" : ""}`}>
-                      {item.badge}
+                      isActive ? "bg-white text-blue-600" : "bg-blue-600 text-white"
+                    } ${item.name === "Files" && !isActive ? "!bg-purple-500" : ""} ${
+                      item.name === "Event" && !isActive ? "!bg-red-500" : ""
+                    }`}>
+                      {item.name === "Friends" ? requests.length : item.badge}
                     </span>
                   )}
                 </motion.div>
