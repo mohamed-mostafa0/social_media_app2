@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useAuthStore } from "@/features/auth/stores/auth.store";
 import { defaultProfileData } from "../data/profile.mock";
-import { UserProfileData } from "../types/profile.types";
+import { ProfilePost, UserProfileData } from "../types/profile.types";
 import { ProfileHeader } from "./ProfileHeader";
 import { ProfileStatsBar } from "./ProfileStatsBar";
 import { ProfileInfoCard } from "./ProfileInfoCard";
@@ -12,6 +12,7 @@ import { ProfileMusicCard } from "./ProfileMusicCard";
 import { ProfileFeed } from "./ProfileFeed";
 import { ProfilePhotosCard } from "./ProfilePhotosCard";
 import { ProfileVideosCard } from "./ProfileVideosCard";
+import { useGetProfile } from "../hooks/useGetProfile";
 
 interface ProfileViewProps {
   initialData?: UserProfileData;
@@ -21,13 +22,37 @@ export function ProfileView({ initialData = defaultProfileData }: ProfileViewPro
   const loggedInUser = useAuthStore((state) => state.user);
   const [activeTab, setActiveTab] = useState("posts");
 
+  const { data: gqlProfile, isLoading } = useGetProfile();
+
+  const currentUser = gqlProfile || loggedInUser;
+
+  const profilePosts: ProfilePost[] = gqlProfile?.posts?.docs?.length
+    ? gqlProfile.posts.docs.map((p) => ({
+        id: p._id,
+        author: {
+          name: `${currentUser?.firstName} ${currentUser?.lastName}`.trim(),
+          avatar: currentUser?.profilePicture || "/default-avatar-profile.webp",
+          date: p.createdAt ? new Date(p.createdAt).toLocaleDateString() : "Recently"
+        },
+        content: p.describtion || "",
+        images: p.attachments || [],
+        likes:  0,
+        comments: p.commentsCount ?? 0,
+        shares: 0,
+      }))
+    : initialData.posts;
+
   const profile: UserProfileData = {
     ...initialData,
-    name: loggedInUser
-      ? `${loggedInUser.firstName} ${loggedInUser.lastName}`
-      : initialData.name,
-    avatar: loggedInUser?.profilePicture || initialData.avatar,
-    coverImage: loggedInUser?.coverPicture || initialData.coverImage,
+    name: currentUser? `${currentUser.firstName} ${currentUser.lastName}`.trim():"",
+    avatar: currentUser?.profilePicture || "/default-avatar-profile.webp",
+    coverImage: currentUser?.coverPicture || initialData.coverImage,
+    stats: {
+      followersCount: currentUser?.followersCount ?? 0,
+      followingCount: currentUser?.followingCount ?? 0,
+      postsCount: currentUser?.postsCount ?? (gqlProfile?.posts?.totalDocs || 0),
+    },
+    posts: profilePosts,
   };
 
   return (

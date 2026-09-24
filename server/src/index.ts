@@ -26,7 +26,9 @@ app.use(morgan("dev"))
 var accessLogStream = fs.createWriteStream('access.log')
 app.use(morgan('dev', { stream: accessLogStream }))
 
-app.all("/graphql" , authentication ,createHandler({schema:MainSchema , context:(req)=>({user: (req.raw as IRequest).loggedInUser}) }))
+const graphqlHandler = createHandler({ schema: MainSchema, context: (req) => ({ user: (req.raw as IRequest).loggedInUser }) })
+app.all("/graphql", authentication, graphqlHandler)
+app.all("/api/graphql", authentication, graphqlHandler)
 
 app.use("/api/auth", controllers.authController)
 app.use("/api/profile", controllers.profileController)

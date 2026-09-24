@@ -12,17 +12,14 @@ interface ProfileHeaderProps {
 export function ProfileHeader({ profile, onEditCover, onEditAvatar }: ProfileHeaderProps) {
   return (
     <div className="relative bg-white rounded-b-2xl shadow-xs overflow-hidden">
-      {/* Cover Image Banner */}
       <div className="relative h-64 sm:h-72 md:h-80 lg:h-96 w-full overflow-hidden bg-gradient-to-r from-teal-800 to-cyan-700">
         <img
           src={profile.coverImage}
           alt="Cover banner"
           className="w-full h-full object-cover object-center transition-transform duration-700 hover:scale-105"
         />
-        {/* Subtle dark gradient overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
 
-        {/* Change Cover Camera Button */}
         <button
           onClick={onEditCover}
           type="button"
@@ -33,9 +30,7 @@ export function ProfileHeader({ profile, onEditCover, onEditAvatar }: ProfileHea
           <span className="hidden sm:inline">Edit Cover</span>
         </button>
 
-        {/* User Identity info sitting above the stats bar */}
         <div className="absolute bottom-4 left-6 sm:left-10 flex items-end gap-4 sm:gap-6 z-10">
-          {/* Avatar with Ring & Plus Badge */}
           <div className="relative group">
             <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full ring-4 ring-white shadow-xl overflow-hidden bg-rose-200">
               <img
@@ -45,7 +40,6 @@ export function ProfileHeader({ profile, onEditCover, onEditAvatar }: ProfileHea
               />
             </div>
             
-            {/* Status / Add Story Button */}
             <button
               onClick={onEditAvatar}
               type="button"
@@ -56,7 +50,6 @@ export function ProfileHeader({ profile, onEditCover, onEditAvatar }: ProfileHea
             </button>
           </div>
 
-          {/* Name & Subtitle */}
           <div className="mb-2 sm:mb-4 text-white drop-shadow-md">
             <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-white">
               {profile.name}

@@ -14,4 +14,6 @@ export * from "./components/ProfileView";
 export * from "./components/FollowRequestsList";
 export * from "./types/request.types";
 export * from "./api/follow.service";
+export * from "./api/profile.service";
 export * from "./hooks/useFollowRequests";
+export * from "./hooks/useGetProfile";

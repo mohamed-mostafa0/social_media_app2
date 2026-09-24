@@ -17,7 +17,8 @@ export const PostType: GraphQLObjectType = new GraphQLObjectType({
         tags: {
             type: new GraphQLList(UserType),
             resolve: (post: any) => post.tags ?? []
-        }
+        },
+        createdAt: { type: GraphQLString }
     })
 })
 

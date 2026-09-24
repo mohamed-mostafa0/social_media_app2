@@ -7,12 +7,9 @@ export const defaultProfileData: UserProfileData = {
   avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=faces",
   coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1920&h=600&fit=crop",
   stats: {
-    posts: 232,
-    followers: 1344,
-    following: 786,
-    collections: 6,
-    photos: 338,
-    videos: 64,
+    followersCount: 1344,
+    followingCount:786,
+    postsCount:232,
   },
   info: {
     location: "London, UK",

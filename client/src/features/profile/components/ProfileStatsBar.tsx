@@ -25,18 +25,14 @@ export function ProfileStatsBar({
   };
 
   const navItems = [
-    { key: "posts", count: stats.posts, label: "posts" },
-    { key: "followers", count: stats.followers, label: "followers" },
-    { key: "following", count: stats.following, label: "following" },
-    { key: "collections", count: stats.collections, label: "collections" },
-    { key: "photos", count: stats.photos, label: "photos" },
-    { key: "videos", count: stats.videos, label: "videos" },
+    { key: "posts", count: stats.postsCount, label: "posts" },
+    { key: "followers", count: stats.followersCount, label: "followers" },
+    { key: "following", count: stats.followingCount, label: "following" },
   ];
 
   return (
     <div className="bg-white border-b border-gray-100 px-4 sm:px-8 py-2.5 sm:py-3 shadow-xs">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        {/* Navigation Tabs with Counts */}
         <div className="flex items-center gap-4 sm:gap-8 overflow-x-auto scrollbar-hide py-1">
           {navItems.map((item) => {
             const isActive = currentTab === item.key;
@@ -60,7 +56,6 @@ export function ProfileStatsBar({
           })}
         </div>
 
-        {/* Settings Action on the right */}
         <div className="flex items-center justify-end">
           <button
             onClick={onOpenSettings}

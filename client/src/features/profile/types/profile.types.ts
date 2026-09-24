@@ -1,10 +1,7 @@
 export interface ProfileStats {
-  posts: number;
-  followers: number;
-  following: number;
-  collections: number;
-  photos: number;
-  videos: number;
+  postsCount: number;
+  followersCount: number;
+  followingCount: number;
 }
 
 export interface ProfileInfo {
@@ -61,9 +58,9 @@ export interface UserProfileData {
   id: string;
   name: string;
   title: string;
-  avatar: string;
+  avatar: string ;
   coverImage: string;
-  stats: ProfileStats;
+  stats: ProfileStats
   info: ProfileInfo;
   socials: SocialLink[];
   music: MusicTrack[];
