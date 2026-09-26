@@ -22,6 +22,8 @@ const postSchema = new mongoose.Schema<IPost>({
             ref:"User"
         }
     ]
+}, {
+    timestamps:true
 })
 
 postSchema.plugin(mongoosePaginate)

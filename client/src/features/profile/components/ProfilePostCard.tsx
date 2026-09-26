@@ -22,6 +22,9 @@ export function ProfilePostCard({
     typeof post.likes === "number" ? post.likes : parseInt(String(post.likes)) || 1400
   );
 
+  console.log("post",post);
+  
+
   const handleLike = () => {
     setIsLiked((prev) => !prev);
     setLikesCount((prev) => (isLiked ? prev - 1 : prev + 1));
@@ -87,7 +90,6 @@ export function ProfilePostCard({
 
   return (
     <article className="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-gray-100 mb-6">
-      {/* Author Header */}
       <div className="flex items-center justify-between mb-3.5">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full overflow-hidden bg-rose-200 ring-2 ring-gray-100">
@@ -114,7 +116,6 @@ export function ProfilePostCard({
         </button>
       </div>
 
-      {/* Post Text & Tags */}
       {(post.content || (post.tags && post.tags.length > 0)) && (
         <div className="mb-3 space-y-1">
           {post.content && (
@@ -137,12 +138,9 @@ export function ProfilePostCard({
         </div>
       )}
 
-      {/* Images Collage */}
       {renderImages()}
 
-      {/* Location Footer & Interaction Bar */}
       <div className="pt-2 border-t border-gray-50 flex items-center justify-between text-xs text-gray-500">
-        {/* Location tag on bottom left */}
         <div className="flex items-center gap-1.5 text-gray-500">
           <FiMapPin className="w-3.5 h-3.5 text-blue-500" />
           <span className="font-medium text-[11px] sm:text-xs">
@@ -150,7 +148,6 @@ export function ProfilePostCard({
           </span>
         </div>
 
-        {/* Reaction Buttons */}
         <div className="flex items-center gap-4">
           <button
             onClick={handleLike}

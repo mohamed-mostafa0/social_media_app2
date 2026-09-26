@@ -13,6 +13,7 @@ import { ProfileFeed } from "./ProfileFeed";
 import { ProfilePhotosCard } from "./ProfilePhotosCard";
 import { ProfileVideosCard } from "./ProfileVideosCard";
 import { useGetProfile } from "../hooks/useGetProfile";
+import { formatRelativeDate } from "@/lib/date.utils";
 
 interface ProfileViewProps {
   initialData?: UserProfileData;
@@ -23,6 +24,8 @@ export function ProfileView({ initialData = defaultProfileData }: ProfileViewPro
   const [activeTab, setActiveTab] = useState("posts");
 
   const { data: gqlProfile, isLoading } = useGetProfile();
+  console.log("gqlProfile", gqlProfile);
+  
 
   const currentUser = gqlProfile || loggedInUser;
 
@@ -32,7 +35,7 @@ export function ProfileView({ initialData = defaultProfileData }: ProfileViewPro
         author: {
           name: `${currentUser?.firstName} ${currentUser?.lastName}`.trim(),
           avatar: currentUser?.profilePicture || "/default-avatar-profile.webp",
-          date: p.createdAt ? new Date(p.createdAt).toLocaleDateString() : "Recently"
+          date: formatRelativeDate(p.createdAt),
         },
         content: p.describtion || "",
         images: p.attachments || [],

@@ -16,44 +16,44 @@ class PostService {
     private followRepo:FollowRepository = new FollowRepository()
 
 
-    // addPost = async(req:Request, res:Response)=>{
-    //     const {user:{_id}} = (req as IRequest).loggedInUser
-    //     const {describtion , allowComments , tags}:IPost = req.body
-    //     const files = req.files as Express.Multer.File[] | undefined
+    addPost = async(req:Request, res:Response)=>{
+        const {user:{_id}} = (req as IRequest).loggedInUser
+        const {describtion , allowComments , tags}:IPost = req.body
+        const files = req.files as Express.Multer.File[] | undefined
 
-    //     if(!describtion && (!files || files.length === 0)) throw new BadRequestException("Describtion or files is required")
+        if(!describtion && (!files || files.length === 0)) throw new BadRequestException("Describtion or files is required")
 
-    //     let finalTags = tags;
-    //     if(tags && tags.length){
-    //         finalTags = Array.from(new Set(tags))
+        let finalTags = tags;
+        if(tags && tags.length){
+            finalTags = Array.from(new Set(tags))
             
-    //         const users = await this.userRepo.findDocuments({_id:{$in:finalTags as Types.ObjectId[]}})
-    //         if(users.length !== finalTags.length) throw new BadRequestException("Some tagged users do not exist")
+            const users = await this.userRepo.findDocuments({_id:{$in:finalTags as Types.ObjectId[]}})
+            if(users.length !== finalTags.length) throw new BadRequestException("Some tagged users do not exist")
 
-    //         const friendships = await this.followRepo.findDocuments({
-    //             status:followStatusEnum.ACCEPTED,
-    //             $or:[
-    //                 {followFromId:_id , followToId:{$in:finalTags as Types.ObjectId[]}},
-    //                 {followToId:_id , followFromId:{$in:finalTags as Types.ObjectId[]}}
-    //             ]
-    //         })
+            const friendships = await this.followRepo.findDocuments({
+                status:followStatusEnum.ACCEPTED,
+                $or:[
+                    {followFromId:_id , followToId:{$in:finalTags as Types.ObjectId[]}},
+                    {followToId:_id , followFromId:{$in:finalTags as Types.ObjectId[]}}
+                ]
+            })
 
-    //         if(friendships.length !== finalTags.length) throw new BadRequestException("You can only tag friends who have accepted your friend request")  
-    //     }
+            if(friendships.length !== finalTags.length) throw new BadRequestException("You can only tag friends who have accepted your friend request")  
+        }
 
-    //     let attachments: string[] = [];
-    //     if(files?.length){
-    //         const filePaths = files.map(file => file.path)
-    //         const uploadResponses = await uploadImagesOnCloudinary(filePaths , "posts")
-    //         attachments = uploadResponses.map(response => response.secure_url)
-    //     }
+        let attachments: string[] = [];
+        if(files?.length){
+            const filePaths = files.map(file => file.path)
+            const uploadResponses = await uploadImagesOnCloudinary(filePaths , "posts")
+            attachments = uploadResponses.map(response => response.secure_url)
+        }
 
-    //     const post = await this.postRepo.createDocument({
-    //         describtion , attachments , allowComments , tags: finalTags , ownerId:_id
-    //     })
+        const post = await this.postRepo.createDocument({
+            describtion , attachments , allowComments , tags: finalTags , ownerId:_id
+        })
 
-    //     return res.status(201).json(successResponse("Post added successfully" , 201 , post))
-    // }
+        return res.status(201).json(successResponse("Post added successfully" , 201 , post))
+    }
 
 
     // listHomePosts = async (req:Request , res:Response)=>{

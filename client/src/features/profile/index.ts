@@ -17,3 +17,4 @@ export * from "./api/follow.service";
 export * from "./api/profile.service";
 export * from "./hooks/useFollowRequests";
 export * from "./hooks/useGetProfile";
+export * from "./hooks/useCreatePostForm";

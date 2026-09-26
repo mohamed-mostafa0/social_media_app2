@@ -35,9 +35,11 @@ export function useRespondToFollowRequest() {
 
     onMutate: async ({ followFromId }) => {
       await queryClient.cancelQueries({ queryKey: FOLLOW_REQUESTS_QUERY_KEY });
-
+      
+      
       const previousRequests =
-        queryClient.getQueryData<FollowRequestItem[]>(FOLLOW_REQUESTS_QUERY_KEY);
+      queryClient.getQueryData<FollowRequestItem[]>(FOLLOW_REQUESTS_QUERY_KEY);
+      console.log("previousRequests : " , previousRequests);
 
       if (previousRequests) {
         queryClient.setQueryData<FollowRequestItem[]>(

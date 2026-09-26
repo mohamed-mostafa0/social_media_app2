@@ -19,8 +19,11 @@ export interface Post {
 }
 
 export interface CreatePostPayload {
-  content: string;
-  images?: string[];
+  describtion: string;
+  attachments?: string[];
   tags?: string[];
-  privacy?: 'public' | 'friends' | 'only_me';
+  allowComments?: boolean;
+  ownerId?:string;
 }
+
+
